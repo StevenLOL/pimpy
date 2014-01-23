@@ -1,0 +1,20 @@
+#!/usr/bin/python 
+import sys,os,pickle,numpy 
+from pimpy.video import Video
+from pimpy.video.cluster import gistClustering
+from pimpy.video.dendogram import VideoDendogram
+
+
+filename = os.path.basename(sys.argv[1])
+
+video = Video("file://"+sys.argv[1])
+
+gc = gistClustering()
+clust = gc.getcluster(video)
+
+pickle.dump(clust, open(filename+'.clust', 'wb'))
+pickle.dump(gc.cuts, open(filename+'.cuts', 'wb'))
+
+vd = VideoDendogram(gc,video)
+vd.drawdendogram(filename+".svg")
+

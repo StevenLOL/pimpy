@@ -1,0 +1,40 @@
+pimpy (0.7) unstable; urgency=low
+
+  * Refactoring storage process using hdf5 file format
+
+ -- Sébastien Campion <sebastien.campion@inria.fr>  Fri, 25 Jun 2010 09:17:08 +0200
+
+pimpy (0.6.4.2) unstable; urgency=low
+
+  * Change pattern factory
+  * documentation update
+
+ -- Sébastien Campion <sebastien.campion@inria.fr>  Mon, 07 Jun 2010 13:43:20 +0200
+
+pimpy (0.6.2) unstable; urgency=low
+
+  * Added OpenCV features GoodFeatures to track and Surf
+  * Add   Sift features using the sift executable binary 
+  * New : Video segmentation encoding pimpy.video.encoder.html5_Encoder(myvideo_segment) 
+
+ -- Sébastien Campion <sebastien.campion@inria.fr>  Tue, 18 May 2010 17:04:02 +0200
+
+pimpy (0.6.0) unstable; urgency=low
+
+  * Big bang refactoring ....
+
+
+ -- Sébastien Campion <sebastien.campion@inria.fr>  Tue, 18 May 2010 17:01:04 +0200
+
+pimpy (0.4.1) unstable; urgency=low
+
+  * Fix some cosmetics bugs
+  * Add smoothing on video key frames request
+
+ -- Sébastien Campion <sebastien.campion@inria.fr>  Thu, 08 Apr 2010 13:46:40 +0200
+
+pimpy (0.4.0) unstable; urgency=low
+
+  * Initial release.
+
+ -- Sébastien Campion <sebastien.campion@inria.fr>  Thu, 08 Apr 2010 09:06:22 +0200

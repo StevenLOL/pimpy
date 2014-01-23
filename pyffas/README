@@ -1,0 +1,33 @@
+PyFFAS : Python Fast FFMPEG Seeker 
+
+this package resolve issues on accurate frame access.
+
+
+1 - The first step, index your video stream : 
+
+from  pyffas import *
+fi = indexer("/home/..../video.avi","/tmp/video.sql")
+
+this operation will read and store in Sqlite database, each I-Frames and theirs positions in the stream. 
+
+2 - second step, grab your frame by framenumber :
+
+fs = seeker("/tmp/video.sql")
+frame = fs.getframe(framenumber=12345)
+frame.save("/tmp/12345.jpg") 
+
+
+by frame time : 
+
+frame = fs.getframe(frametime=12000)
+frame.save("/tmp/120000.jpg") 
+
+
+
+Congratz and beer are welcome
+
+ScamP
+
+
+
+

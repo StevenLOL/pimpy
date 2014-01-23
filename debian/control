@@ -1,0 +1,14 @@
+Source: pimpy
+Section: python
+Priority: optional
+Maintainer: Sebastien Campion (scamp)
+Build-Depends: debhelper (>=7.0.0), python-support (>= 0.6), cdbs (>= 0.4.49), python-all-dev,
+Standards-Version: 3.8.4
+
+Package: pimpy
+Architecture: any
+Homepage: http://pim.gforge.inria.fr/pimpy/
+XB-Python-Version: ${python:Versions}
+Depends: python-scipy (>=0.7.0), python-gst0.10 (>=0.10), python-imaging ( >=1.1.6), python-h5py ( >=1.2.0) , libgstreamer-plugins-base0.10-0 , gstreamer0.10-plugins-base, python-opencv (>=2.0), gstreamer0.10-gnonlin (>=0.10), ${misc:Depends}, ${python:Depends}
+Recommends: pyleargist, pycuda
+Description: Plateform for Indexing Multimedia for Python is a dedicated toolkit to audio, video indexing treatments. This project comes from TEXMEX research team works. For more information, see http://www.irisa.fr/texmex/
