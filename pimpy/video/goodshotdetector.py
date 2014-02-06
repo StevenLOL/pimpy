@@ -1,4 +1,5 @@
 from __future__ import division
+import os
 import sys
 import numpy 
 import time
@@ -215,8 +216,9 @@ def __usage():
     print "usage  : python -m pimpy.video.goodshotdetector [-i input_dir] [-o output] [option]"
     print "Options :"
     print "-s      : save histogram feature in numpy format with filename videofile.mpg.npy"
-    print "-e .avi : video file extension default is .mpg"
+    print "-e avi,mp4,mpg : video file extension by default avi,mp4,mpg"
     print "-d file : debug file, print log in file "
+    print "-p default|relax|aggresive : profile "
 
 
 def drange(start, stop, step):
@@ -229,20 +231,20 @@ def drange(start, stop, step):
 def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:],
-                                   "i:e:o:d:v",
+                                   "i:e:o:d:v:p",
                                    ["inputdir=",
                                     "extension=",
                                     "output=",
-                                    "debugfile="])
+                                    "debugfile=",
+				    "profile="])
     except getopt.GetoptError, err:
         print str(err) 
         __usage()
         sys.exit(2)
     input = None 
-    ext = ".mpg"
-    output = None
-    alpha = 2.6
-    beta = 0.10
+    ext = "avi,mpg,mp4"
+    output = "."
+    profile = "default"
     for o, a in opts:
         if o == "-v":
             logging.basicConfig(level=logging.DEBUG)
@@ -252,6 +254,8 @@ def main():
             ext = a
         elif o in ("-o", "--output"):
             output = a
+        elif o in ("-p", "--profile"):
+            profile = a
         elif o in ("-d", "--debugfile"):
             logging.basicConfig(filename=a,level=logging.DEBUG)
         else:
@@ -265,37 +269,22 @@ def main():
     start = time.time()
     
     sd = ShotDetector()
-
-    a = alpha
-    for b in drange(0,0.05,0.01):            
-        
-        expeid = str(a)+'-'+str(b)
-        if os.path.exists(output+expeid+'.xml'):
-            print output+expeid+'.xml exist we skip '
-            continue 
-
-        print 'expe : ',a,b
-        print '------------------'
-
-        root, sbr = __init_xml(output,expeid)
-        for f in os.listdir(input):
-            if not f.endswith(ext):
-                continue
-            f = os.path.join(input,f)
-            print "Process file : %s" % "file://"+os.path.abspath(f)
-            start= time.time()
-            cuts,diss = sd.process("file://"+os.path.abspath(f),
-                                       alpha=a,
-                                       beta=b)
-            print "Cuts      : \n"+str(cuts)
-            print "Dissolve  : \n"+str(diss)
-            print "Duration  : "+str(time.time()-start)
-            videofile = os.path.basename(f)
-            seg = SubElement(sbr,'seg',{'src' : videofile})
-            __write_cut(seg,cuts)
-            __write_grad(seg,diss)
-            
-            __write_xml(root,output+expeid+'.xml')
+    root, sbr = __init_xml(output, profile)
+    for f in os.listdir(input):
+        if not f.split('.')[-1] in ext.split(','):
+            continue
+        f = os.path.join(input,f)
+        print "Process file : %s" % "file://"+os.path.abspath(f)
+        start= time.time()
+        cuts,diss = sd.process("file://"+os.path.abspath(f),profile)
+        print "Cuts      : \n"+str(cuts)
+        print "Dissolve  : \n"+str(diss)
+        print "Duration  : "+str(time.time()-start)
+        videofile = os.path.basename(f)
+        seg = SubElement(sbr,'seg',{'src' : videofile})
+        __write_cut(seg,cuts)
+        __write_grad(seg,diss)        
+        __write_xml(root,os.path.join(output,profile+'.xml'))
 
 def __write_xml(root,outputfile):
     xmlstring = tostring(root)
@@ -304,11 +293,11 @@ def __write_xml(root,outputfile):
     file.write(xmlstring)
     file.close()
 
-def __init_xml(outputfile,expeid):
+def __init_xml(outputfile, profile):
     xmltree = ElementTree()
     sbrs = Element('shotBoundaryResults')
     SubElement(sbrs,'shotBoundaryResult',
-               {'sysId' : 'pimpy'+expeid,
+               {'sysId' : 'pimpy '+profile,
                 'totalRunTime'          : '0',
                 'totalDecodeTime'       : '0',
                 'totalSegmentationTime' : '0',

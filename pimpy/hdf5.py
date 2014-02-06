@@ -160,7 +160,7 @@ class File(h5py.File):
 
     def _set_md5_mediafile(self):
         mp = self.attrs["medium"]
-        self.attrs["md5"] = self._md5(mp)
+	#self.attrs["md5"] = self._md5(mp)
 
     def _md5(self,path):
         m = hashlib.md5()
